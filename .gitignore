@@ -18,3 +18,6 @@ __pycache__/
 .venv/
 venv/
 .DS_Store
+
+# Personal report drafts (not part of the public repo)
+report/

@@ -4,8 +4,8 @@
 
 | Resource | Link |
 |---|---|
-| Notebook | [`diabetes_risk_prediction.ipynb`](diabetes_risk_prediction.ipynb) · [Open in Colab](https://colab.research.google.com/github/<your-username>/<your-repo>/blob/main/diabetes_risk_prediction.ipynb) |
-| Google Drive (raw data + saved models) | _add link_ |
+| Notebook | [`diabetes_risk_prediction.ipynb`](diabetes_risk_prediction.ipynb) · [Open in Colab](https://colab.research.google.com/github/Shumbusho43/SummativeML/blob/main/diabetes_risk_prediction.ipynb) |
+| Google Drive (raw data + saved models) | https://drive.google.com/drive/folders/1cvrziKSbJSD7fCHvzdFkXYAlizxkadWu?usp=sharing|
 | Video presentation | _add link_ |
 | Report (IEEE) | _add link_ |
 
@@ -36,16 +36,16 @@ The notebook downloads the CSV from UCI automatically. **The raw data is not com
 | Evaluation | ROC and PR curves; confusion matrices at three operating points (0.5, F1-optimal, recall ≥ 80%); calibration curves; bootstrap 95% CIs; paired bootstrap test of ML vs DL |
 | Error analysis | FN/FP profiling, subgroup performance by age, sex, income and BMI, permutation importance, inspection of the most confident errors |
 
-## Key results (held-out test set, n = 34,422)
+## Key results (held-out test set, n = 34,422; Google Colab run)
 
 | Model | ROC-AUC [95% CI] | PR-AUC | Recall / Specificity @ recall ≥ 80% threshold |
 |---|---|---|---|
 | Logistic Regression (tuned) | 0.810 [0.804, 0.816] | 0.417 | 79.9% / 67.5% |
 | Hist Gradient Boosting (tuned) | 0.817 [0.811, 0.823] | 0.438 | 79.5% / 68.4% |
-| Keras MLP baseline (DL-2) | 0.817 [0.812, 0.823] | 0.437 | 79.8% / 68.6% |
-| Best Keras model (DL-5.6: 256-128-64 MLP, RMSprop) | 0.817 [0.811, 0.823] | 0.437 | 79.3% / 68.7% |
+| Keras MLP baseline (DL-2) | 0.817 [0.812, 0.823] | 0.437 | 79.6% / 68.7% |
+| Best Keras model (DL-4: Functional wide & deep with embeddings) | 0.817 [0.812, 0.823] | 0.438 | 79.6% / 68.7% |
 
-- **Traditional ML and deep learning are statistically tied.** The paired-bootstrap ΔAUC between the best ML and best DL model is about 0, with a confidence interval that includes 0. Gradient boosting gets there with default settings and about 2 seconds of training.
+- **Traditional ML and deep learning are statistically tied.** The paired-bootstrap ΔAUC between tuned gradient boosting and the best Keras model is −0.0005 (95% CI −0.0016 to +0.0005), an interval that includes 0. Gradient boosting gets there with default settings and about 2 seconds of training.
 - **The ceiling is set by the data, not the models.** Learning curves plateau, extra network capacity adds nothing, and twelve DL configurations span less than 0.005 AUC.
 - **Imbalance handling and threshold choice matter far more than model choice.** They move recall between about 16% and 80% while leaving AUC unchanged.
 - **Error analysis:** missed cases are diabetics *without* the usual risk footprint (normal BMI, no hypertension, good self-rated health). Recall is much lower for younger and leaner respondents.
@@ -98,9 +98,12 @@ ml = joblib.load("models/best_ml_pipeline.joblib")           # raw survey column
 X = pd.DataFrame([{...21 raw survey columns...}])
 risk = ml.predict_proba(X)[:, 1]
 
+# The best DL model in the Colab run is the wide-and-deep network, which takes a dict of named inputs
 dl = keras.models.load_model("models/best_dl_model.keras")
-prep = joblib.load("models/dl_preprocessor.joblib")
-risk_dl = dl.predict(prep.transform(X).astype("float32")).ravel()
+prep = joblib.load("models/dl_wide_deep_preprocessor.joblib")
+inputs = {"dense_features": prep.transform(X).astype("float32")}
+inputs.update({c: X[c].to_numpy("int32").reshape(-1, 1) for c in ["Age", "GenHlth", "Income", "Education"]})
+risk_dl = dl.predict(inputs).ravel()
 ```
 
 Decision thresholds and test metrics for both models are recorded in `models/model_card.json`. Predicted probabilities come from class-weighted models and **over-estimate absolute risk**, so treat them as rankings or use the recorded thresholds.
