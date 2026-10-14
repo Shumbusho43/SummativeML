@@ -1,0 +1,10 @@
+# Tested with Python 3.9 / scikit-learn 1.6.1 / TensorFlow 2.16.2 (Keras 3); also runs on Google Colab defaults.
+numpy>=1.24
+pandas>=2.0
+scipy>=1.10
+scikit-learn>=1.3
+tensorflow>=2.16
+matplotlib>=3.7
+seaborn>=0.12
+joblib>=1.3
+jupyter>=1.0

@@ -1,0 +1,20 @@
+# Raw data must NOT be committed (it lives in the Google Drive folder)
+data/
+*.csv
+!results/*.csv
+*.zip
+
+# Model weights and Drive artefacts are shared via Google Drive, not GitHub
+models/
+drive_upload/
+*.keras
+*.h5
+*.joblib
+*.pkl
+
+# Python / Jupyter
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+venv/
+.DS_Store
