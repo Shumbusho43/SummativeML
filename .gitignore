@@ -19,5 +19,8 @@ __pycache__/
 venv/
 .DS_Store
 
-# Personal report drafts (not part of the public repo)
-report/
+# Keep the final report deliverables while excluding the working draft and copies of figures.
+report/*
+!report/diabetes_risk_prediction_report.md
+!report/diabetes_risk_prediction_report.docx
+!report/diabetes_risk_prediction_report.pdf

@@ -6,8 +6,8 @@
 |---|---|
 | Notebook | [`diabetes_risk_prediction.ipynb`](diabetes_risk_prediction.ipynb) · [Open in Colab](https://colab.research.google.com/github/Shumbusho43/SummativeML/blob/main/diabetes_risk_prediction.ipynb) |
 | Google Drive (raw data + saved models) | https://drive.google.com/drive/folders/1cvrziKSbJSD7fCHvzdFkXYAlizxkadWu?usp=sharing|
-| Video presentation | _add link_ |
-| Report (IEEE) | _add link_ |
+| Video presentation | [Watch on YouTube](https://youtu.be/gv-O7atbpes) |
+| Report (IEEE) | [PDF](report/diabetes_risk_prediction_report.pdf) · [Word](report/diabetes_risk_prediction_report.docx) · [Markdown source](report/diabetes_risk_prediction_report.md) |
 
 ## Problem
 
